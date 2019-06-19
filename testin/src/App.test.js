@@ -4,8 +4,6 @@ import { render, fireEvent, getByText } from "@testing-library/react"; // << ins
 import "@testing-library/react/cleanup-after-each";
 
 import App from "./App";
-import Display from "./Display";
-import Dashboard from "./Dashboard";
 
 describe("<App />", () => {
   it("renders without crashing", () => {
@@ -46,31 +44,27 @@ describe("<App />", () => {
       getByText(/strike!/i);
     });
 
-    it("increments strikes", async () => {
+    it("increments strikes", () => {
       const { getByText } = render(<App />);
-      const StrikeButton = getByText(/hit!/i);
-      const strikes = getByText(/strikes: 0/i);
-      const strikesNum = strikes.textContent[strikes.textContent.length - 1];
-      fireEvent.click(StrikeButton);
-      expect(strikesNum).toBe("1");
+      const strikeButton = getByText(/strike!/i);
+      fireEvent.click(strikeButton);
+      expect(getByText(/strikes:/i).textContent).toContain("1");     
     });
 
-    it("resets balls and strikes at 3 strikes", async () => {
+    it("resets balls and strikes at 3 strikes", () => {
       const { getByText } = render(<App />);
-      const StrikeButton = getByText(/hit!/i);
-      const balls = getByText(/balls: 0/i);
-      const ballsNum = balls.textContent[balls.textContent.length - 1];
-      const strikes = getByText(/strikes: 0/i);
-      const strikesNum = strikes.textContent[strikes.textContent.length - 1];
-      expect(ballsNum).toBe("0");
-      expect(strikesNum).toBe("0");      
-      fireEvent.click(StrikeButton);
-      fireEvent.click(StrikeButton);
-      fireEvent.click(StrikeButton);
-      const newBallsNum = balls.textContent[balls.textContent.length - 1];
-      const newStrikesNum = strikes.textContent[strikes.textContent.length - 1];
-      expect(newBallsNum).toBe("0");
-      expect(newStrikesNum).toBe("0");
+      const ballButton = getByText(/ball!/i);
+      const strikeButton = getByText(/strike!/i);
+      expect(getByText(/balls:/i).textContent).toContain("0");
+      expect(getByText(/strikes:/i).textContent).toContain("0");     
+      fireEvent.click(strikeButton);
+      fireEvent.click(strikeButton);
+      fireEvent.click(ballButton);
+      expect(getByText(/balls:/i).textContent).toContain("1");
+      expect(getByText(/strikes:/i).textContent).toContain("2");
+      fireEvent.click(strikeButton);
+      expect(getByText(/balls:/i).textContent).toContain("0");
+      expect(getByText(/strikes:/i).textContent).toContain("0");
     });
   });
 
@@ -80,32 +74,28 @@ describe("<App />", () => {
       getByText(/ball!/i);
     });
 
-    it("increments balls", async () => {
+    it("increments balls", () => {
       const { getByText } = render(<App />);
-      const BallButton = getByText(/hit!/i);
-      const balls = getByText(/balls: 0/i);
-      const ballsNum = balls.textContent[balls.textContent.length - 1];
-      fireEvent.click(BallButton);
-      expect(ballsNum).toBe("1");
+      const ballButton = getByText(/ball!/i);
+      fireEvent.click(ballButton);
+      expect(getByText(/balls:/i).textContent).toContain("1");
     });
 
-    it("resets balls and strikes at 4 balls", async () => {
+    it("resets balls and strikes at 4 balls", () => {
       const { getByText } = render(<App />);
-      const BallButton = getByText(/hit!/i);
-      const balls = getByText(/balls: 0/i);
-      const ballsNum = balls.textContent[balls.textContent.length - 1];
-      const strikes = getByText(/strikes: 0/i);
-      const strikesNum = strikes.textContent[strikes.textContent.length - 1];
-      expect(ballsNum).toBe("0")
-      expect(strikesNum).toBe("0");
-      fireEvent.click(BallButton);
-      fireEvent.click(BallButton);
-      fireEvent.click(BallButton);
-      fireEvent.click(BallButton);
-      const newBallsNum = balls.textContent[balls.textContent.length - 1];
-      const newStrikesNum = strikes.textContent[strikes.textContent.length - 1];
-      expect(newBallsNum).toBe("0");
-      expect(newStrikesNum).toBe("0");
+      const ballButton = getByText(/ball!/i);
+      const strikeButton = getByText(/strike!/i);
+      expect(getByText(/balls:/i).textContent).toContain("0");
+      expect(getByText(/strikes:/i).textContent).toContain("0");
+      fireEvent.click(ballButton);
+      fireEvent.click(ballButton);
+      fireEvent.click(ballButton);
+      fireEvent.click(strikeButton);
+      expect(getByText(/balls:/i).textContent).toContain("3");
+      expect(getByText(/strikes:/i).textContent).toContain("1");
+      fireEvent.click(ballButton);
+      expect(getByText(/balls:/i).textContent).toContain("0");
+      expect(getByText(/strikes:/i).textContent).toContain("0");
     });
   });
 
@@ -115,8 +105,16 @@ describe("<App />", () => {
       getByText(/foul!/i);
     });
 
-    it("increments strikes if there are less than 2 strikes", async () => {
+    it("increments strikes if there are less than 2 strikes", () => {
       const { getByText } = render(<App />);
+      const foulButton = getByText(/foul!/i);
+      expect(getByText(/strikes:/i).textContent).toContain("0");
+      fireEvent.click(foulButton);
+      expect(getByText(/strikes:/i).textContent).toContain("1");
+      fireEvent.click(foulButton);
+      expect(getByText(/strikes:/i).textContent).toContain("2");
+      fireEvent.click(foulButton);
+      expect(getByText(/strikes:/i).textContent).toContain("2");
     });
   });
 
@@ -126,18 +124,18 @@ describe("<App />", () => {
       getByText(/hit!/i);
     });
 
-    it("resets balls and strikes", async () => {
+    it("resets balls and strikes", () => {
       const { getByText } = render(<App />);
-      const HitButton = getByText(/hit!/i);
-      const BallButton = getByText(/hit!/i);
-      const StrikeButton = getByText(/strike!/i);
-      await fireEvent.click(BallButton);
-      await fireEvent.click(StrikeButton);
+      const hitButton = getByText(/hit!/i);
+      const ballButton = getByText(/ball!/i);
+      const strikeButton = getByText(/strike!/i);
+      fireEvent.click(ballButton);
+      fireEvent.click(strikeButton);
       expect(getByText(/balls:/i).textContent).toContain("1");
-      expect(getByText(/strikes:/i).textContent).stringContaining("1");
-      await fireEvent.click(HitButton);
-      expect(getByText(/balls:/i).textContent).stringContaining("0");
-      expect(getByText(/strikes:/i).textContent).stringContaining("0");
+      expect(getByText(/strikes:/i).textContent).toContain("1");
+      fireEvent.click(hitButton);
+      expect(getByText(/balls:/i).textContent).toContain("0");
+      expect(getByText(/strikes:/i).textContent).toContain("0");
     });
   });
 });
