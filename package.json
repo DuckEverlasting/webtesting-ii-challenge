@@ -1,0 +1,27 @@
+{
+  "name": "webtesting-ii-challenge",
+  "version": "1.0.0",
+  "description": "In this project, you will demonstrate proficiency by writing unit tests and production code to satisfy the _Minimum Viable Product_ described below.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DuckEverlasting/webtesting-ii-challenge.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DuckEverlasting/webtesting-ii-challenge/issues"
+  },
+  "homepage": "https://github.com/DuckEverlasting/webtesting-ii-challenge#readme",
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^8.0.1"
+  }
+}
